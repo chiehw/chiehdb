@@ -1,0 +1,16 @@
+#!/bin/sh
+
+OUTPUT=$1
+PREFIX=$2
+if test -z "$OUTPUT" || test -z "$PREFIX"; then
+    echo "usage: $0 <output-filename> <directory_prefix>" >&2
+    exit 1
+fi
+rm -f $OUTPUT
+touch $OUTPUT
+
+DIRS="$PREFIX/db $PREFIX/util $PREFIX/table"
+PRUNE_TEST="-name *test*.cc -prune"
+PORTABLE_FILES=`find $DIRS $PRUNE_TEST -o -name '*.cc' -print | sort | sed "s,^$PREFIX/,," | tr "\n" " "`
+
+echo "SOURCES=$PORTABLE_FILES" >> $OUTPUT
