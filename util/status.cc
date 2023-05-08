@@ -3,7 +3,6 @@
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
 #include <stdio.h>
-#include "port/port.h"
 #include "leveldb/status.h"
 
 namespace leveldb
