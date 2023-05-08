@@ -18,7 +18,12 @@ namespace leveldb
         }
     }
 
-    inline char *Arena::Allocate(size_t bytes)
+    size_t Arena::MemoryUsage() const
+    {
+        return reinterpret_cast<uintptr_t>(memory_usage_.NoBarrier_Load());
+    }
+
+    char *Arena::Allocate(size_t bytes)
     {
         assert(bytes > 0);
         // 当前块内存可以分配
