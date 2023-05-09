@@ -3,7 +3,7 @@
 namespace leveldb
 {
     // 根据系统是大端还是小端，将数据存入 buf
-    void EncodeFixed64(char *buf, uint32_t value)
+    void EncodeFixed32(char *buf, uint32_t value)
     {
         if (port::kLittleEndian)
         {
