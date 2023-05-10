@@ -2,6 +2,12 @@
 
 namespace leveldb
 {
+    void PutFixed32(std::string *dst, uint32_t value)
+    {
+        char buf[sizeof(value)];
+        EncodeFixed32(buf, value);
+        dst->append(buf, sizeof(buf));
+    }
     // 根据系统是大端还是小端，将数据存入 buf
     void EncodeFixed32(char *buf, uint32_t value)
     {

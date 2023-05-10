@@ -8,6 +8,7 @@
 
 namespace leveldb
 {
+    extern void PutFixed32(std::string *dst, uint32_t value);
     extern void EncodeFixed32(char *buf, uint32_t value);
 
     inline uint32_t DecodeFixed32(const char *ptr)
