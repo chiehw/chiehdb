@@ -50,13 +50,16 @@ $(STATIC_OUTDIR)/libleveldb.a:$(STATIC_LIBOBJECTS)
 # 生成可执行程序
 $(STATIC_OUTDIR)/arena_test:util/arena_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) util/arena_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
+$(STATIC_OUTDIR)/coding_test:util/coding_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) util/coding_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
 
 TESTS = \
-	util/arena_test
+	util/arena_test \
+	util/coding_test
 PROGNAMES := $(notdir $(TESTS))
 STATIC_PROGRAMS := $(addprefix $(STATIC_OUTDIR)/, $(PROGNAMES))
 all: $(STATIC_OBJDIRS) $(STATIC_OUTDIR)/libleveldb.a $(STATIC_PROGRAMS)
 
 run:
 	make all
-	cd /home/chieh/Documents/chiehdb/out-static && echo "==============\n" && ./arena_test
+	cd /home/chieh/Documents/chiehdb/out-static && echo "==============\n" && ./coding_test
