@@ -6,6 +6,11 @@
 #define PLATFORM_IS_LITTLE_ENDIAN (__BYTE_ORDER == __LITTLE_ENDIAN)
 #endif
 
+#include <pthread.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 namespace leveldb
 {
     namespace port
@@ -13,6 +18,23 @@ namespace leveldb
 
         static const bool kLittleEndian = PLATFORM_IS_LITTLE_ENDIAN;
 #undef PLATFORM_IS_LITTLE_ENDIAN
+
+        class Mutex
+        {
+        public:
+            Mutex();
+            ~Mutex();
+
+            void Lock();
+            void Unlock();
+            void AssertHeld() {}
+
+        private:
+            pthread_mutex_t mu_;
+
+            Mutex(const Mutex &);
+            void operator=(const Mutex &);
+        };
 
     }
 }
