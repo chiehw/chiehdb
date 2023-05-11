@@ -9,8 +9,9 @@ fi
 rm -f $OUTPUT
 touch $OUTPUT
 
+PORT_FILE=port/port_posix.cc
 DIRS="$PREFIX/db $PREFIX/util $PREFIX/table"
 PRUNE_TEST="-name *test*.cc -prune"
 PORTABLE_FILES=`find $DIRS $PRUNE_TEST -o -name '*.cc' -print | sort | sed "s,^$PREFIX/,," | tr "\n" " "`
 
-echo "SOURCES=$PORTABLE_FILES" >> $OUTPUT
+echo "SOURCES=$PORTABLE_FILES $PORT_FILE" >> $OUTPUT
