@@ -9,6 +9,7 @@ namespace leveldb
             if (result != 0)
             {
                 fprintf(stderr, "pthread %s: %s\n", label, strerror(result));
+                // 会终止程序的执行
                 abort();
             }
         }
