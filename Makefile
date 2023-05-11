@@ -17,7 +17,7 @@ STATIC_OUTDIR=out-static
 STATIC_LIBOBJECTS := $(addprefix $(STATIC_OUTDIR)/, $(SOURCES:.cc=.o))
 
 
-TESTHARNESS := $(STATIC_OUTDIR)/util/testharness.o $(TESTUTIL)
+TESTHARNESS := $(STATIC_OUTDIR)/util/testharness.o
 
 
 # 静态编译输出文件夹生成
@@ -54,15 +54,20 @@ $(STATIC_OUTDIR)/coding_test:util/coding_test.cc $(STATIC_LIBOBJECTS) $(TESTHARN
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) util/coding_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
 $(STATIC_OUTDIR)/crc32c_test:util/crc32c_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) util/crc32c_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
+$(STATIC_OUTDIR)/db_test:db/db_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) db/db_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
 	
 TESTS = \
 	util/arena_test \
 	util/coding_test \
-	util/crc32c_test
+	util/crc32c_test \
+	db/db_test
 PROGNAMES := $(notdir $(TESTS))
 STATIC_PROGRAMS := $(addprefix $(STATIC_OUTDIR)/, $(PROGNAMES))
 all: $(STATIC_OBJDIRS) $(STATIC_OUTDIR)/libleveldb.a $(STATIC_PROGRAMS)
 
 run:
 	make all
-	cd /home/chieh/Documents/chiehdb/out-static && echo "==============\n" && ./crc32c_test
+	cd /home/chieh/Documents/chiehdb/out-static && echo "==============\n" && ./db_test
+
+# g++ -pthread -I. -I./include -O2 -DNDEBUG util/arena_test.cc out-static/db/db_impl.o out-static/db/log_write.o out-static/util/arena.o out-static/util/coding.o out-static/util/crc32c.o out-static/util/env_posix.o out-static/util/status.o out-static/util/testharness.o -o out-static/arena_test 
