@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 
 namespace leveldb
 {
@@ -125,5 +126,62 @@ namespace leveldb
             f.l_len = 0;
             return fcntl(fd, F_SETLK, &f);
         }
+    }
+
+    class PosixEnv : public Env
+    {
+    public:
+        PosixEnv();
+        virtual ~PosixEnv()
+        {
+            char msg[] = "Destroying Env::Default()\n";
+            fwrite(msg, 1, sizeof(msg), stderr);
+        }
+
+        virtual Status newWritableFile(const std::string &fname, WritableFile **result)
+        {
+            Status s;
+            FILE *f = fopen(fname.c_str(), "w");
+            if (f == NULL)
+            {
+                *result = NULL;
+                s = IOError(fname, errno);
+            }
+            else
+            {
+                *result = new PosixWritableFile(fname, f);
+            }
+            return s;
+        }
+
+    private:
+        void PthreadCall(const char *label, int result)
+        {
+            if (result != 0)
+            {
+                fprintf(stderr, "pthread %s: %s\n", label, strerror(result));
+                abort();
+            }
+        }
+
+        pthread_mutex_t mu_;
+    };
+
+    PosixEnv::PosixEnv()
+    {
+        PthreadCall("mutex_init", pthread_mutex_init(&mu_, NULL));
+    }
+
+    static pthread_once_t once = PTHREAD_ONCE_INIT;
+    static Env *default_env;
+    static void InitDefaultEnv()
+    {
+        default_env = new PosixEnv;
+    }
+
+    Env *Env::Default()
+    {
+        pthread_once(&once, InitDefaultEnv);
+        return default_env;
     }
 }
