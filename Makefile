@@ -68,6 +68,6 @@ all: $(STATIC_OBJDIRS) $(STATIC_OUTDIR)/libleveldb.a $(STATIC_PROGRAMS)
 
 run:
 	make all
-	cd /home/chieh/Documents/chiehdb/out-static && echo "==============\n" && ./db_test
+	cd /home/chieh/Documents/chiehdb/examples && make run
 
 # g++ -pthread -I. -I./include -O2 -DNDEBUG util/arena_test.cc out-static/db/db_impl.o out-static/db/log_write.o out-static/util/arena.o out-static/util/coding.o out-static/util/crc32c.o out-static/util/env_posix.o out-static/util/status.o out-static/util/testharness.o -o out-static/arena_test 
