@@ -8,6 +8,17 @@ namespace leveldb
 {
     class WritableFile;
 
+    class Env
+    {
+    public:
+        Env() {}
+        virtual ~Env() {}
+
+        static Env *Default();
+        virtual Status NewWritableFile(const std::string &fname, WritableFile **result) = 0;
+        virtual Status CreateDir(const std::string &name) = 0;
+    };
+
     class WritableFile
     {
     public:

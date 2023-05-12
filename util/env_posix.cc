@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 namespace leveldb
 {
@@ -138,7 +139,17 @@ namespace leveldb
             fwrite(msg, 1, sizeof(msg), stderr);
         }
 
-        virtual Status newWritableFile(const std::string &fname, WritableFile **result)
+        virtual Status CreateDir(const std::string &name)
+        {
+            Status result;
+            if (mkdir(name.c_str(), 0755) != 0)
+            {
+                result = IOError(name, errno);
+            }
+            return result;
+        }
+
+        virtual Status NewWritableFile(const std::string &fname, WritableFile **result)
         {
             Status s;
             FILE *f = fopen(fname.c_str(), "w");
