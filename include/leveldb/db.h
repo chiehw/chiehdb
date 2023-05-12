@@ -4,7 +4,6 @@
 #include <string>
 #include "leveldb/status.h"
 #include "leveldb/options.h"
-#include "leveldb/write_batch.h"
 
 namespace leveldb
 {
