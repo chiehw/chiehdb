@@ -6,6 +6,17 @@ namespace leveldb
 {
     DB::~DB() {}
 
+    struct DBImpl::Writer
+    {
+        Status status;
+
+        bool sync;
+        bool down;
+        port::CondVar cv;
+
+        explicit Writer(port::Mutex *mu) : cv(mu) {}
+    };
+
     DBImpl::DBImpl(const Options &raw_options, const std::string &dbname)
         : dbname_(dbname), env_(raw_options.env)
     {

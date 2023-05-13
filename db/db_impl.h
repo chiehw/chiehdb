@@ -8,6 +8,7 @@
 #include "leveldb/env.h"
 #include "version_set.h"
 #include "db/log_write.h"
+#include <deque>
 
 namespace leveldb
 {
@@ -19,6 +20,8 @@ namespace leveldb
 
     private:
         friend class DB;
+        struct Writer;
+
         const std::string dbname_;
         Env *const env_;
 
@@ -28,6 +31,8 @@ namespace leveldb
 
         port::Mutex mutex_;
         VersionSet *versions_;
+
+        std::deque<Writer *> writers_;
 
         DBImpl(const DBImpl &);
         void operator=(const DBImpl &);
