@@ -30,10 +30,26 @@ namespace leveldb
             void AssertHeld() {}
 
         private:
+            friend class CondVar;
             pthread_mutex_t mu_;
 
             Mutex(const Mutex &);
             void operator=(const Mutex &);
+        };
+
+        class CondVar
+        {
+        public:
+            explicit CondVar(Mutex *mu);
+            ~CondVar();
+
+            void Wait();
+            void Signal();
+            void SignalAll();
+
+        private:
+            pthread_cond_t cv_;
+            Mutex *mu_;
         };
 
     }

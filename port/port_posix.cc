@@ -33,5 +33,30 @@ namespace leveldb
         {
             PthreadCall("unlock mutex", pthread_mutex_unlock(&mu_));
         }
+
+        CondVar::CondVar(Mutex *mu) : mu_(mu)
+        {
+            PthreadCall("init cv", pthread_cond_init(&cv_, NULL));
+        }
+
+        CondVar::~CondVar()
+        {
+            PthreadCall("destroy cv", pthread_cond_destroy(&cv_));
+        }
+
+        void CondVar::Wait()
+        {
+            PthreadCall("wait", pthread_cond_wait(&cv_, &mu_->mu_));
+        }
+
+        void CondVar::Signal()
+        {
+            PthreadCall("signal", pthread_cond_signal(&cv_));
+        }
+
+        void CondVar::SignalAll()
+        {
+            PthreadCall("broadcast", pthread_cond_broadcast(&cv_));
+        }
     }
 }
